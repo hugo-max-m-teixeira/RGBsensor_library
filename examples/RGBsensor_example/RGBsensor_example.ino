@@ -1,27 +1,70 @@
-#include <RGBsensor.h>
+#include <RGBsensor.h>	// Include RGBsensor library
 
-RGBsensor sensor;
+RGBsensor sensor;	// Creating RGBsensor object named sensor (this will be our sensor's name)
 
 void setup () {
-	Serial.begin(9600);
+	Serial.begin(9600);	// Activating Serial monitor, for printing information on monitor
 	
-	sensor.setLDRpin(A7);
-	sensor.setRGBpins(A0, A5, A3);
-	sensor.setPins();
-	
-	sensor.setBlank();
-	delay(4000);
+	sensor.setLDRpin(A7);			// A entrada de sinal do sensor LDR está conectada na porta A7 (obrigatoriamente essa entrada de sinal deve ser em uma porta analógica)
+	sensor.setRGBpins(A0, A5, A3);	// Os pinos do nosso LED RGB (red - pino A0, green - pino A5, blue - pino A3. A ordem dos pinos informada deve respectivamente para os LEDs vermelho, verde e azul. Os pinos informados deve funcionar como saída digital.)
+	sensor.setPins();				// Configura os pinos do LDR e do LED RGB.
+
+	delay(200);						// Aguarda 200 ms
+	sensor.setBlank();				// Realiza a leitura da cor branca, para servir como referência de comparação para as demais cores.
 }
 
 void loop () {
-	//sensor.readColor();
-	
-	/*for(uint16_t i:sensor.color_value){
-		Serial.println(i);
-	}*/
 
+	Serial.print("Type 1 and press enter to read the sensor");
+
+	char answer = '0';
 	
+	while(answer == '0'){
+		if(Serial.available() > 0){
+			answer = Serial.read();
+		}
+	}
+
+
+	sensor.readColor();
+
+	Serial.print("Main color: ");
 	Serial.println(sensor.getColor());
+
+	Serial.print("Second main color: ");
+	Serial.println(sensor.getRefletanceOrder(1));
 	
-	delay(3000);
+	Serial.print("Last color: ");
+	Serial.println(sensor.getRefletanceOrder(2));
+
+	Serial.println("\n");
+
+	Serial.println("white values: ");
+	Serial.print("Red: ");
+	Serial.println(sensor.getBlank('R'));
+	Serial.print("Green: ");
+	Serial.println(sensor.getBlank('G'));
+	Serial.print("Blue: ");
+	Serial.println(sensor.getBlank('B'));
+	
+	
+	Serial.println("\nColor values:");
+	Serial.print("Red: ");
+	Serial.println(sensor.getColor('R'));
+	Serial.print("Green: ");
+	Serial.println(sensor.getColor('G'));
+	Serial.print("Blue: ");
+	Serial.println(sensor.getColor('B'));
+
+	Serial.print("\nPer cent: \n");
+	Serial.print("R : ");
+	Serial.println(sensor.getPerCent('R'));
+	Serial.print("G : ");
+	Serial.println(sensor.getPerCent('G'));
+	Serial.print("B : ");
+	Serial.println(sensor.getPerCent('B'));
+	
+
+	Serial.print("\n\n\n-----------------------------");
+	
 }

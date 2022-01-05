@@ -1,0 +1,19 @@
+RGBsensor	KEYWORD1
+setLDRpin	KEYWORD2
+setRGBpins	KEYWORD2
+setPins	KEYWORD2
+setBlank	KEYWORD2
+getColor	KEYWORD2
+readColor	KEYWORD2
+getRefletanceOrder	KEYWORD2
+getR	KEYWORD2
+getG	KEYWORD2
+getB	KEYWORD2
+getColor	KEYWORD2
+getBlank	KEYWORD2
+setCutoff	KEYWORD2
+getPerCent	KEYWORD2
+setHighTime	KEYWORD2
+setLowTime	KEYWORD2
+commonAnode	KEYWORD2
+
