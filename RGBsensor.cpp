@@ -77,10 +77,10 @@ void RGBsensor::commonAnode (){
 void RGBsensor::setBlank(){
 	for(int i=0; i<3; i++){	// For each LED
 		digitalWrite(pin_led[i], (common_anode ? LOW : HIGH));	// turn on the led "i"
-		delay(high_time*1.8);									// Wait a little moment
+		delay(high_time);										// Wait a little moment (*1.8)
 		blank_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
 		digitalWrite(pin_led[i], (common_anode ? HIGH : LOW));	// Turn off the led "i"
-		delay(low_time*1.8);									// Wait a moment while the LED stops emitting light
+		delay(low_time);										// Wait a moment while the LED stops emitting light
 	}
 }
 

@@ -15,8 +15,8 @@ void setup () {
 
 void loop () {
 
-	Serial.print("Type 1 and press enter to read the sensor");
-
+	Serial.print("\nPress ENTER to read the sensor\n\n");
+  
 	char answer = '0';
 	
 	while(answer == '0'){
@@ -29,7 +29,7 @@ void loop () {
 	sensor.readColor();
 
 	Serial.print("Main color: ");
-	Serial.println(sensor.getColor());
+	Serial.println(sensor.getRefletanceOrder(0));
 
 	Serial.print("Second main color: ");
 	Serial.println(sensor.getRefletanceOrder(1));
@@ -37,7 +37,7 @@ void loop () {
 	Serial.print("Last color: ");
 	Serial.println(sensor.getRefletanceOrder(2));
 
-	Serial.println("\n");
+	Serial.print("\n");
 
 	Serial.println("white values: ");
 	Serial.print("Red: ");
@@ -56,7 +56,7 @@ void loop () {
 	Serial.print("Blue: ");
 	Serial.println(sensor.getColor('B'));
 
-	Serial.print("\nPer cent: \n");
+	Serial.print("\nVariation in percentage: \n");
 	Serial.print("R : ");
 	Serial.println(sensor.getPerCent('R'));
 	Serial.print("G : ");

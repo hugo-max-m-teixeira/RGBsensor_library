@@ -46,7 +46,7 @@ private:
 	void compareValues();		// Compare the values betwen white color and actual color
 	char numberToColor (int value);
 	uint8_t charToIndex(char color);
-	uint16_t high_time = 20, low_time = 20;	//Default times HIGH and LOW
+	uint16_t high_time = 50, low_time = 50;	//Default times HIGH and LOW
 	bool common_anode = false;
 };
 
