@@ -56,6 +56,14 @@ void loop () {
 	Serial.print("Blue: ");
 	Serial.println(sensor.getColor('B'));
 
+	Serial.println("\nVariation:");
+	Serial.print("Red: ");
+	Serial.println(sensor.getBlank('R') - sensor.getColor('R'));
+	Serial.print("Green: ");
+	Serial.println(sensor.getBlank('G') - sensor.getColor('G'));
+	Serial.print("Blue: ");
+	Serial.println(sensor.getBlank('B') - sensor.getColor('B'));
+
 	Serial.print("\nVariation in percentage: \n");
 	Serial.print("R : ");
 	Serial.println(sensor.getPerCent('R'));
