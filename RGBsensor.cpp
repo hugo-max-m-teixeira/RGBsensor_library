@@ -54,8 +54,7 @@ int RGBsensor::getBlank(char color){
 }
 
 int RGBsensor::getPerCent(char color){
-	int max_refletance = blank_value[charToIndex(color)];	//Gets the blank value
-	return (float(getColor(color)) / float(max_refletance)) * 100.0;	// Compare
+	return percent_value[charToIndex(color)];
 }
 
 void RGBsensor::setCutoff(uint16_t val){
@@ -100,6 +99,8 @@ void RGBsensor::compareValues() {
 		compared_value[i] = blank_value[i] - color_value[i];
 	}
 	
+	computePerCent();
+	
 	bool white = true;	// Checks if the color is white (difference too small betwen blank_value and color_value)
 	for(int i:compared_value){
 		if(abs(i) > cutoff_value) white = false;
@@ -109,34 +110,40 @@ void RGBsensor::compareValues() {
 		color = 'W';
 		for(int i=0; i<3; i++) refletance_order[i] = 'W';
 	} else {
-		int lower = compared_value[0];
-		for(int i:compared_value){	// Look for the lower value of the array
+		int lower = percent_value[0];
+		for(int i:percent_value){	// Look for the lower value of the array
 			if(i < lower) lower = i;
 		}
 		
-		int higher = compared_value[0];
-		for(int i:compared_value){	// Look for the higher value of the vector
+		int higher = percent_value[0];
+		for(int i:percent_value){	// Look for the higher value of the vector
 			if(i > higher)	higher = i;
 		}
 		
-		int second_lower = compared_value[0];
-		for(int i:compared_value){	// Middle value
+		int second_lower = percent_value[0];
+		for(int i:percent_value){	// Middle value
 			if((i != lower) && (i != higher))	second_lower = i;
 		}
 		
-		color = numberToColor(lower);
+		color = numberPerCentToColor(higher);
 
 		refletance_order[0] = color;
-		refletance_order[1] = numberToColor(second_lower);
-		refletance_order[2] = numberToColor(higher);
+		refletance_order[1] = numberPerCentToColor(second_lower);
+		refletance_order[2] = numberPerCentToColor(lower);
 	}
 }
 
-char RGBsensor::numberToColor (int value){
+void RGBsensor::computePerCent(){
+	for(int i=0; i<3; i++){
+		percent_value[i] = (double(color_value[i]) / double(blank_value[i]) * 100.0);
+	}
+}
+
+char RGBsensor::numberPerCentToColor (int value){
 	char result;
-	if(value == compared_value[0]) result='R';
-	else if(value == compared_value[1]) result='G';
-	else if(value == compared_value[2]) result='B';
+	if(value == percent_value[0]) result='R';
+	else if(value == percent_value[1]) result='G';
+	else if(value == percent_value[2]) result='B';
 	return result;
 }
 

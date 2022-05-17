@@ -40,11 +40,12 @@ public:
 private:
 	uint8_t pin_ldr;	//LDR pin (light sensor)
 	uint8_t pin_led[3];	//LEDs pins (pin_led[0] = red, pin_led[1] = green, pin_led[2] = blue)
-	int blank_value[3], color_value[3], compared_value[3], cutoff_value = 22;	// Light values
+	int blank_value[3], color_value[3], compared_value[3], percent_value[3], cutoff_value = 22;	// Light values
 	char color = "";	// Color => 'R' =  red,     'G' = green,     'B' = blue
 	char refletance_order[3] = {""};	// Descending order of refletance
 	void compareValues();		// Compare the values betwen white color and actual color
-	char numberToColor (int value);
+	void computePerCent();
+	char numberPerCentToColor(int value);
 	uint8_t charToIndex(char color);
 	uint16_t high_time = 50, low_time = 50;	//Default times HIGH and LOW
 	bool common_anode = false;
