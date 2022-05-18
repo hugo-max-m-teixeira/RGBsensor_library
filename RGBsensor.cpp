@@ -73,22 +73,31 @@ void RGBsensor::commonAnode (){
 	this->common_anode = true;
 }
 
+void RGBsensor::turn(char color, bool state){
+	turn(charToIndex(color), state);
+}
+
+void RGBsensor::turn(int color_num, bool state){
+	if (common_anode) state = !state;
+	digitalWrite(pin_led[color_num], state);
+}
+
 void RGBsensor::setBlank(){
 	for(int i=0; i<3; i++){	// For each LED
-		digitalWrite(pin_led[i], (common_anode ? LOW : HIGH));	// turn on the led "i"
+		turn(i, 1);												// turn on the led "i"
 		delay(high_time);										// Wait a little moment (*1.8)
 		blank_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
-		digitalWrite(pin_led[i], (common_anode ? HIGH : LOW));	// Turn off the led "i"
-		delay(low_time);										// Wait a moment while the LED stops emitting light
+		turn(i, 0);												// Turn off the led "i"
+		delay(low_time);										// Wait a moment while the LED stops emitting light	
 	}
 }
 
 void RGBsensor::readColor(){
 	for(int i=0; i<3; i++){	// For each LED
-		digitalWrite(pin_led[i], (common_anode ? LOW : HIGH));	// turn on the led "i"
+		turn(i, 1);												// turn on the led "i"
 		delay(high_time);										// Wait a little moment
 		color_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
-		digitalWrite(pin_led[i], (common_anode ? HIGH : LOW));	// Turn off the led "i"
+		turn(i, 0);												// Turn off the led "i"
 		delay(low_time);										// Wait a moment while the LED stops emitting light
 	}
 	compareValues();	

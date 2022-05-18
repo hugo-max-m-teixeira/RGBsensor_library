@@ -36,6 +36,8 @@ public:
 	void setHighTime(uint16_t time);	//Time that the LED keeps ON
 	void setLowTime(uint16_t time);		//Time that the LED keeps OFF
 	void commonAnode();	// Common anode LED (don't call this method if your LED is common cathod)
+	void turn(char color, bool state);		//Change manually the state of the LED
+	void turn(int color_num, bool state);
 
 private:
 	uint8_t pin_ldr;	//LDR pin (light sensor)
