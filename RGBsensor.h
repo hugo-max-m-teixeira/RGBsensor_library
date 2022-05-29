@@ -14,14 +14,15 @@
 class RGBsensor {
 public:
 	// Pins...
-	void setLDRpin(uint8_t pin);
-	void setRGBpins(uint8_t pin_r, uint8_t pin_g, uint8_t pin_b);
+	void setLDRpin(uint8_t pin);	//Sets the LDR pin (analog Arduino port)
+	void setRGBpins(uint8_t pin_r, uint8_t pin_g, uint8_t pin_b);	// Sets the RGB pins, respectively
 	void setPins();	// pinMode and etc.
 	
 	
 	//Basic methods
 	void setBlank();	// Set the blank color
 	char getColor();	// Read and return the strongest actual color ('R', 'G' or 'B')
+	bool isBlack();
 	
 	// Other methods
 	void readColor();			// Read values of actual color
@@ -29,17 +30,24 @@ public:
 	int getR();	//Returns the refletance of the red color
 	int getG();	//Returns the refletance of the green color
 	int getB();	//Returns the refletance of the blue color
-	int getColor(char color);
+	int getColor(char color);	//Returns the refletance of the color sensor
+	int getColor(int index);
 	int getBlank(char color);
-	void setCutoff(uint16_t val);	//Sets the cutoff value, for white color detect
-	int getPerCent(char color);
+	int getBlank(int index);
+	void setBlank(char color, int value);
+	void setBlank(int index, int value);
+	void setCutoff(uint16_t val);		//Sets the cutoff value, for white color detect
+	void setBlackPercentage(float percent);	// Sets the black percentage for gg
+	int getPerCent(char color);			// Returns the percentage of the color variance compared to the blank color value
+	int getPerCent(int index);
 	void setHighTime(uint16_t time);	//Time that the LED keeps ON
 	void setLowTime(uint16_t time);		//Time that the LED keeps OFF
-	void commonAnode();	// Common anode LED (don't call this method if your LED is common cathod)
-	void turn(char color, bool state);		//Change manually the state of the LED
+	void commonAnode();					// Common anode LED (don't call this method if your LED is common cathod)
+	void turn(char color, bool state);	//Change manually the state of the LED
 	void turn(int color_num, bool state);
 
 private:
+	float black_percentage;
 	uint8_t pin_ldr;	//LDR pin (light sensor)
 	uint8_t pin_led[3];	//LEDs pins (pin_led[0] = red, pin_led[1] = green, pin_led[2] = blue)
 	int blank_value[3], color_value[3], compared_value[3], percent_value[3], cutoff_value = 22;	// Light values
