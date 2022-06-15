@@ -68,6 +68,8 @@ void RGBsensor::turn(int color_num, bool state){
 	digitalWrite(pin_led[color_num], state);
 }
 
+void RGBsensor::setMultiplierBlank(float multiplier){	multiplier_blank = multiplier;	}
+
 bool RGBsensor::isBlack(){
 	bool black = true;
 	for(int i=0; i<3; i++){
@@ -84,11 +86,13 @@ bool RGBsensor::isBlack(){
 void RGBsensor::setBlank(){
 	for(int i=0; i<3; i++){	// For each LED
 		turn(i, 1);												// turn on the led "i"
-		delay(high_time);										// Wait a little moment (*1.8)
+		delay(high_time*multiplier_blank);										// Wait a little moment (*1.8)
 		blank_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
 		turn(i, 0);												// Turn off the led "i"
-		delay(low_time);										// Wait a moment while the LED stops emitting light	
+		delay(low_time*multiplier_blank);										// Wait a moment while the LED stops emitting light	
 	}
+	last_lecture = millis();
+	total_lecture_time = high_time + low_time;
 }
 
 void RGBsensor::readColor(){
@@ -101,6 +105,20 @@ void RGBsensor::readColor(){
 		
 	}
 	compareValues();	
+	last_lecture = millis();
+}
+
+unsigned int RGBsensor::compute_delay(unsigned long actual, unsigned long last_time, unsigned int default_delay){
+	unsigned int result;
+	unsigned int delta_time = actual - last_time;
+	if(delta_time < (total_lecture_time*3)){
+		result = default_delay;
+	} else {
+		result = default_delay * (delta_time/3);
+		if(result > (total_lecture_time*multiplier_blank)){
+			result = total_lecture_time*multiplier_blank;
+		}
+	}
 }
 
 void RGBsensor::compareValues() {	

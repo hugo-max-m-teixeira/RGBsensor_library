@@ -45,9 +45,13 @@ public:
 	void commonAnode();					// Common anode LED (don't call this method if your LED is common cathod)
 	void turn(char color, bool state);	//Change manually the state of the LED
 	void turn(int color_num, bool state);
+	void setMultiplierBlank(float multiplier);	// Sets the time multiplier for the first blank lecture
 
 private:
+	unsigned long last_lecture;
 	float black_percentage;
+	unsigned int total_lecture_time;
+	float multiplier_blank = 4;
 	uint8_t pin_ldr;	//LDR pin (light sensor)
 	uint8_t pin_led[3];	//LEDs pins (pin_led[0] = red, pin_led[1] = green, pin_led[2] = blue)
 	int blank_value[3], color_value[3], compared_value[3], percent_value[3], cutoff_value = 22;	// Light values
@@ -57,6 +61,7 @@ private:
 	void computePerCent();
 	char numberPerCentToColor(int value);
 	uint8_t charToIndex(char color);
+	unsigned int compute_delay(unsigned long actual, unsigned long last_time, unsigned int default_delay);
 	uint16_t high_time = 50, low_time = 50;	//Default times HIGH and LOW
 	bool common_anode = false;
 };
