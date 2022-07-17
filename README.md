@@ -8,6 +8,27 @@ Biblioteca para Arduino desenvolvida para facilitar o uso de um sensor de cor ba
   <li>Receber os valores de refletância em valores discretos de variações de tensão ou em porcentagem para cada uma das cores do LED RGB</>
 </ul>
 
+## Configurando o sensor:
+  Lembrando que os códigos fornecidos abaixo são de exemplo, os pinos informados não precisam ser os mesmos mencionados aqui.
+### Criando o objeto:
+  Aqui daremos um nome ao nosso sensor, esse será o nome atribuido a ele no restante do programa.
+  ```cpp
+    RGBsensor sensor; // Sensor é o nome do nosso sensor
+  ```
+### Setando os pinos
+  Agora diremos ao programa onde estão conectados os pinos dos LEDs (ou do LED) e do LDR
+  ```cpp
+    sensor.setRGBpins(4, 5, 6); // Pinos onde estão conectados os LEDs coloridos, respectivamente vermelho, verde e azul
+  ```
+  Obervação: a ordem dos pinos informados deve ser: primeiro o pino do LED vermelho, depois do verde e logo em seguida do azul. Além disso, lembre-se de que os pinos informados devem ter a função de saída digital.
+  
+  Chegou a vez do LDR:
+  
+  ```cpp
+    sensor.setLDRpin(A0); // Pinos onde está conectado o LDR, resistor dependente de luz
+  ```
+  Observação: Lembrando que o pino de leitura do LDR deve estar conectado a uma porta de leitura analógica.
+
 ## Métodos
  ### Calibração:
   ```cpp
