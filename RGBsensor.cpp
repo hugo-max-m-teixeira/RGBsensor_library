@@ -91,22 +91,28 @@ void RGBsensor::setBlank(){
 	turn(2, 0);
 	for(int i=0; i<3; i++){	// For each LED
 		turn(i, 1);												// turn on the led "i"
-		delay(high_time*multiplier_blank);										// Wait a little moment (*1.8)
+		delay(high_time);										// Wait a little moment (*1.8)
 		blank_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
 		turn(i, 0);												// Turn off the led "i"
-		delay(low_time*multiplier_blank);										// Wait a moment while the LED stops emitting light	
+		delay(low_time);										// Wait a moment while the LED stops emitting light	
 	}
 	last_lecture = millis();
 	total_lecture_time = high_time + low_time;
 }
 
 void RGBsensor::readColor(){
-	for(int i=0; i<3; i++){	// For each LED
+	unsigned int delay_high = computeDelay(millis(), last_lecture, high_time);
+	unsigned int delay_low = computeDelay(millis(), last_lecture, low_time);
+	turn(0, 1);												// turn on the led "i"
+	delay(delay_high);										// Wait a little moment
+	color_value[0] = analogRead(pin_ldr);					// Read the light(refletance) value
+	turn(0, 0);												// turn on the led "i"
+	for(int i=1; i<3; i++){	// For each LED
 		turn(i, 1);												// turn on the led "i"
-		delay(computeDelay(millis(), last_lecture, high_time));										// Wait a little moment
+		delay(high_time);										// Wait a little moment
 		color_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
 		turn(i, 0);												// Turn off the led "i"
-		delay(computeDelay(millis(), last_lecture, low_time));										// Wait a moment while the LED stops emitting light
+		delay(low_time);										// Wait a moment while the LED stops emitting light
 		
 	}
 	compareValues();	
@@ -116,7 +122,7 @@ void RGBsensor::readColor(){
 unsigned int RGBsensor::computeDelay(unsigned long actual_time, unsigned long last_time, unsigned int default_delay){
 	unsigned int result;
 	unsigned int delta_time = actual_time - last_time;
-	if(delta_time < (total_lecture_time*3)){
+	if(delta_time < (total_lecture_time*2)){
 		result = default_delay;
 	} else {
 		result = default_delay * (delta_time/3);

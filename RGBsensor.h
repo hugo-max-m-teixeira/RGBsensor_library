@@ -52,7 +52,7 @@ private:
 	unsigned long last_lecture;	// Last lecture time
 	uint16_t black_percentage = 70, min_color_variation = 7;
 	unsigned int total_lecture_time;
-	float multiplier_blank = 4;	// Multiplier for first blank lecture
+	float multiplier_blank = 2;	// Multiplier for first blank lecture
 	uint8_t pin_ldr;	//LDR pin (light sensor)
 	uint8_t pin_led[3];	//LEDs pins (pin_led[0] = red, pin_led[1] = green, pin_led[2] = blue)
 	int blank_value[3], color_value[3], compared_value[3], percent_value[3];	// Light values
