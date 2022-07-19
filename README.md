@@ -32,23 +32,43 @@ Biblioteca para Arduino desenvolvida para facilitar o uso de um sensor de cor ba
 ## Métodos
  ### Calibração:
   ```cpp
-    sensor.setBlank();
+    sensor.setBlank();  // Reliza a calibração do sensor, adquirindo os valores de refletência na cor branca
   ```
   Observação: Quando esse método é chamado, o sensor deve estar posicionado sobre a cor branca. Os valores adquiridos nas leituras realizadas serão usados como referência para a comparação das demais cores.
   "sensor" - nome do objeto (nome dado ao sensor no programa)
+  <br><br>
   
   ### Realizar leitura e retornar cor:
   ```cpp
     char color = sensor.getColor();
   ```
-  Observação: Os valores de retorno dessa função podem ser (a variável acima, color, pode assumir os seguintes valores):
+  Observação: Os valores de retorno dessa função (a variável acima, color, podem assumir os seguintes valores):
   <ul>
     <li>'R' - cor vermelha</li>
     <li>'G' - cor verde</li>
     <li>'B' - cor azul</li>
   </ul>
   O valor retornado será a cor (dentre as listadas acima) que apresentou maior refletância durante a leitura e comparação.
-
+  <br><br>
+  
+  ### Realizar leitura
+  Esse método raliza somente a leitura do sensor, não retornado valor algum (void).
+  ```cpp
+    sensor.readColor(); // Realiza a leitura do sensor, sem retornar o valor da cor
+  ```
+  <br>
+  
+  ### Retornar cor
+  Retorna a cor lida pelo sensor (na última leitura realizada)
+  ```cpp
+    char color = sensor.getColor(uint8_t index); // Realiza a leitura do sensor
+  ```
+  Observações: Esse método retorna um valor do tipo char que pode assumir os mesmos valores do método readColor() <a href="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-e-retornar-cor">citado anteriormente</a>. 
+  Com relação ao "index" informado como parâmentro, esse representa a ordem de refletância que você deseja adquirir, sendo:
+  * index = 0 -> Cor que mais refletiu
+  * index = 1 -> Sengunda cor que mais relfetiu
+  * index = 2 -> Cor que menos refletiu
+  <br>
 Circuito dos LEDs para a montagem do sensor:
 <br>
 <centered>
