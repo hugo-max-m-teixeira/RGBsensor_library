@@ -70,7 +70,7 @@ void RGBsensor::turn(int color_num, bool state){
 	digitalWrite(pin_led[color_num], state);
 }
 
-void RGBsensor::setMultiplierBlank(float multiplier){	multiplier_blank = multiplier;	}
+void RGBsensor::setFirstReadingMultiplier(float multiplier){	first_reading_multiplier = multiplier;	}
 
 bool RGBsensor::isBlack(){
 	bool black = true;
@@ -126,8 +126,8 @@ unsigned int RGBsensor::computeDelay(unsigned long actual_time, unsigned long la
 		result = default_delay;
 	} else {
 		result = default_delay * (delta_time/3);
-		if(result > (total_lecture_time*multiplier_blank)){
-			result = default_delay*multiplier_blank;
+		if(result > (total_lecture_time*first_reading_multiplier)){
+			result = default_delay*first_reading_multiplier;
 		}
 	}
 	return result;
@@ -194,3 +194,11 @@ uint8_t RGBsensor::charToIndex(char color){
 	else	value = 0;
 	return value;
 }
+
+//////////////////////////////// manyRGBsensors class ////////////////////////////////
+/*
+void manyRGBsensors::addSensor(RGBsensor *new_sensor){
+	amount++;
+	sensors = realloc(sensors, amount*sizeof(RGBsensor));
+	sensors[amount - 1] = new_sensor;
+}*/

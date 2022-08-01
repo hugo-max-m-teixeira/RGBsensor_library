@@ -46,13 +46,13 @@ public:
 	void commonAnode();					// Common anode LED (don't call this method if your LED is common cathod)
 	void turn(char color, bool state);	//Change manually the state of the LED 
 	void turn(int color_num, bool state);
-	void setMultiplierBlank(float multiplier);	// Sets the time multiplier for the first blank lecture
+	void setFirstReadingMultiplier(float multiplier);	// Sets the time multiplier for the first blank lecture
 
 private:
 	unsigned long last_lecture;	// Last lecture time
 	uint16_t black_percentage = 70, min_color_variation = 7;
 	unsigned int total_lecture_time;
-	float multiplier_blank = 2;	// Multiplier for first blank lecture
+	float first_reading_multiplier = 3;	// Multiplier for first blank lecture
 	uint8_t pin_ldr;	//LDR pin (light sensor)
 	uint8_t pin_led[3];	//LEDs pins (pin_led[0] = red, pin_led[1] = green, pin_led[2] = blue)
 	int blank_value[3], color_value[3], compared_value[3], percent_value[3];	// Light values
@@ -67,5 +67,20 @@ private:
 	uint16_t high_time = 50, low_time = 50;	//Default times HIGH and LOW
 	bool common_anode = false;
 };
+/*
+class manyRGBsensors{
+	public:
+		uint16_t amount = 0;
+		RGBsensor *sensors = malloc(sizeof(RGBsensor));
+		
+		manyRGBsensors(RGBsensor *sensors_[]){
+			amount = sizeof(sensors_)/sizeof(RGBsensor);
+			this->sensors = realloc(this->sensors, amount*sizeof(RGBsensor));
+		}
+		
+		manyRGBsensors(){}
+		
+		void addSensor(RGBsensor* new_sensor);
+};*/
 
 #endif
