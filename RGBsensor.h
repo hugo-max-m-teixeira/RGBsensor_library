@@ -38,7 +38,7 @@ public:
 	void setBlank(int index, int value);
 	void setCutoff(uint16_t val);		//Sets the cutoff value, for white color detect
 	void setBlackPercentage(float percent);	// Sets the min value for color reflectance to be considered non-black
-	void RGBsensor::setMinColorVariatin(uint16_t val);
+	void setMinColorVariation(uint16_t val);
 	int getPerCent(char color);			// Returns the percentage of the color variance compared to the blank color value
 	int getPerCent(int index);
 	void setHighTime(uint16_t time);	//Time that the LED keeps ON

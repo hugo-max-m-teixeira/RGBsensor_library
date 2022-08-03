@@ -53,7 +53,7 @@ int RGBsensor::getPerCent(int index){	return percent_value[index];	}
 
 void RGBsensor::setCutoff(uint16_t val){	cutoff_percent_value = val;	}
 
-void RGBsensor::setMinColorVariatin(uint16_t val){	min_color_variation = val;	}
+void RGBsensor::setMinColorVariation(uint16_t val){	min_color_variation = val;	}
 
 void RGBsensor::setHighTime(uint16_t time){	high_time = time;	}
 
