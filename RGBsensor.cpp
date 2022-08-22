@@ -10,6 +10,8 @@
 
 void RGBsensor::setLDRpin(uint8_t pin){	pin_ldr = pin;	}
 
+uint8_t RGBsensor::getLDRpin(){	return pin_ldr;	}
+
 void RGBsensor::setRGBpins(uint8_t pin_r, uint8_t pin_g, uint8_t pin_b){
 	pin_led[0] = pin_r;	pin_led[1] = pin_g;	pin_led[2] = pin_b;
 }
@@ -27,7 +29,7 @@ char RGBsensor::getColor(){
 	return color;
 }
 
-char RGBsensor::getRefletanceOrder(uint8_t pos){	return refletance_order[pos];	}
+char RGBsensor::getReflectanceOrder(uint8_t pos){	return reflectance_order[pos];	}
 
 int RGBsensor::getR(){	return color_value[0];	}
 
@@ -61,6 +63,8 @@ void RGBsensor::setLowTime(uint16_t time){	low_time = time;	}
 
 void RGBsensor::setBlackPercentage(float percentage) {	black_percentage = 1.0 - (percentage/100.0);	}
 
+void RGBsensor::setBlankValue(uint8_t color_index, uint16_t value){	blank_value[color_index] = value;	}
+
 void RGBsensor::commonAnode (){	this->common_anode = true;	}
 
 void RGBsensor::turn(char color, bool state){	turn(charToIndex(color), state);	}
@@ -92,7 +96,8 @@ void RGBsensor::setBlank(){
 	for(int i=0; i<3; i++){	// For each LED
 		turn(i, 1);												// turn on the led "i"
 		delay(high_time);										// Wait a little moment (*1.8)
-		blank_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
+		setBlankValue(i, analogRead(pin_ldr));
+		//blank_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
 		turn(i, 0);												// Turn off the led "i"
 		delay(low_time);										// Wait a moment while the LED stops emitting light	
 	}
@@ -162,13 +167,13 @@ void RGBsensor::compareValues() {
 	
 	if(white){
 		color = 'W';
-		for(int i=0; i<3; i++) refletance_order[i] = 'W';
+		for(int i=0; i<3; i++) reflectance_order[i] = 'W';
 	} else {		
 		color = numberPerCentToColor(higher);
 
-		refletance_order[0] = color;
-		refletance_order[1] = numberPerCentToColor(second_lower);
-		refletance_order[2] = numberPerCentToColor(lower);
+		reflectance_order[0] = color;
+		reflectance_order[1] = numberPerCentToColor(second_lower);
+		reflectance_order[2] = numberPerCentToColor(lower);
 	}
 }
 
@@ -196,9 +201,67 @@ uint8_t RGBsensor::charToIndex(char color){
 }
 
 //////////////////////////////// manyRGBsensors class ////////////////////////////////
-/*
+
+manyRGBsensors::manyRGBsensors(RGBsensor *sensors_[]){
+	amount = sizeof(sensors_)/sizeof(RGBsensor);
+	this->sensors = realloc(this->sensors, amount*sizeof(RGBsensor));
+}
+
 void manyRGBsensors::addSensor(RGBsensor *new_sensor){
 	amount++;
 	sensors = realloc(sensors, amount*sizeof(RGBsensor));
 	sensors[amount - 1] = new_sensor;
-}*/
+}
+
+void manyRGBsensors::setBlank(){
+	turn(0, 1);
+	delay(500);
+	turn(0, 0);
+	
+	for(int i=0; i<3; i++){	// For each color...
+		turn(i, 1);
+		delay(sensors[0]->high_time);
+		for(int j=0; j<amount; j++){	// For each sensor...
+			sensors[j]->setBlankValue(i, analogRead(sensors[j]->getLDRpin()));
+		}
+		delay(sensors[0]->low_time);
+		turn(i, 0);
+	}
+	for(int i=0; i<amount; i++){
+		sensors[i]->last_lecture = millis();
+		sensors[i]->total_lecture_time = (sensors[0]->high_time + sensors[0]->low_time) * 3;
+	}
+}
+
+void manyRGBsensors::readColor(){
+	unsigned int delay_high = sensors[0]->computeDelay(millis(), sensors[0]->last_lecture, sensors[0]->high_time);
+	//unsigned int delay_low = computeDelay(millis(), sensors[0]->last_lecture, sensors[0]->low_time);
+	turn(0, 1);												// turn on the red led (index 0)
+	delay(delay_high);										// Wait a little moment
+	for(int i=0; i<amount; i++){
+		sensors[i]->color_value[0] = analogRead(sensors[i]->getLDRpin());	// Read the light(refletance) value for the first color (red)
+	}
+	manyRGBsensors::turn(0, 0);												// turn off the red led (index 0)
+	for(int i=1; i<3; i++){	// For each LED
+		turn(i, 1);											// turn on the led "i"
+		delay(sensors[0]->high_time);										// Wait a little moment
+		for(int j=0; j<amount; j++){
+			sensors[j]->color_value[i] = analogRead(sensors[j]->getLDRpin());					// Read the light(refletance) value
+		}
+		turn(i, 0);											// Turn off the led "i"
+		delay(sensors[0]->low_time);										// Wait a moment while the LED stops emitting light
+		
+	}
+	for(int i=0; i<amount; i++){
+		sensors[i]->compareValues();
+		sensors[i]->last_lecture = millis();
+	}	
+}
+
+void manyRGBsensors::turn(char color, bool state){	turn(sensors[0]->charToIndex(color), state);	}
+
+void manyRGBsensors::turn(int color_num, bool state){
+	for(int i=0; i<amount; i++){
+		sensors[i]->turn(color_num, state);
+	}
+}
