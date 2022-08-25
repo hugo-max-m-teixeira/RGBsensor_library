@@ -29,13 +29,13 @@ void loop () {
 	sensor.readColor();
 
 	Serial.print("Main color: ");
-	Serial.println(sensor.getRefletanceOrder(0));
+	Serial.println(sensor.getReflectanceOrder(0));
 
 	Serial.print("Second main color: ");
-	Serial.println(sensor.getRefletanceOrder(1));
+	Serial.println(sensor.getReflectanceOrder(1));
 	
 	Serial.print("Last color: ");
-	Serial.println(sensor.getRefletanceOrder(2));
+	Serial.println(sensor.getReflectanceOrder(2));
 
 	Serial.print("\n");
 

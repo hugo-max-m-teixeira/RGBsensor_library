@@ -16,7 +16,7 @@ getPerCent	KEYWORD2
 setHighTime	KEYWORD2
 setLowTime	KEYWORD2
 commonAnode	KEYWORD2
-manyRGBsensors	KEYWORD2
+manyRGBsensors	KEYWORD1
 addSensor	KEYWORD2
 setHighTime	KEYWORD2
 setLowTime	KEYWORD2

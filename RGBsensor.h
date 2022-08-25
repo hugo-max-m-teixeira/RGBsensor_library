@@ -66,7 +66,7 @@ public:
 	uint16_t cutoff_percent_value = 10;	// Cutoff value for white and color diferentiation
 	char color = "";	// Color => 'R' =  red,     'G' = green,     'B' = blue
 	char reflectance_order[3] = {""};	// Descending order of refletance
-	uint16_t high_time = 50, low_time = 50;	//Default times HIGH and LOW
+	uint16_t high_time = 80, low_time = 0;	//Default times HIGH and LOW
 	bool common_anode = false;
 };
 
