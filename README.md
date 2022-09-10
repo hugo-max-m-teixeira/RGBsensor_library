@@ -127,7 +127,7 @@ Biblioteca para Arduino desenvolvida para facilitar o uso de um sensor de cor ba
     <li>2 - cor azul</li>
   </ul>
 
-  Lembrando que, antes de ser adquirida a reflectância de qualquer cor, <strong>ao menos uma leitura deve ser realizada </strong>, com a <a hfef="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-(somente)">função readColor()</a>;
+  Lembrando que, antes de ser adquirida a reflectância de qualquer cor, <strong>ao menos uma leitura deve ser realizada </strong>, com a <a hfef="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-somente">função readColor()</a>;
 
 <br>
 
@@ -137,7 +137,7 @@ Biblioteca para Arduino desenvolvida para facilitar o uso de um sensor de cor ba
 
   result = sensor.isBlack();
 ```
- Lembrando que, antes de verificar se a cor é preta, <strong>ao menos uma leitura deve ser realizada </strong>, com a <a hfef="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-(somente)">função readColor()</a>;
+ Lembrando que, antes de verificar se a cor é preta, <strong>ao menos uma leitura deve ser realizada </strong>, com a <a hfef="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-somente">função readColor()</a>;
 
 <br>
 
