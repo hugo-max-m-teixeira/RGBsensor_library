@@ -82,11 +82,10 @@ void RGBsensor::setFirstReadingMultiplier(float multiplier){	first_reading_multi
 bool RGBsensor::isBlack(){
 	bool black = true;
 	for(int i=0; i<3; i++){
-			Serial.println("\t\tValor da cor: " + String(color_value[i]));
+		if(color_value[i] > (blank_value[i] * black_percentage)){ // Tenta falsear a variável, verifaca se algum pasa do valor esperado
+			/*Serial.println("\t\tValor da cor: " + String(color_value[i]));
 			Serial.println("\t\tValor da comparação: " + String((blank_value[i] * black_percentage)));
-			Serial.println("\t\tValor percentage: " + String(black_percentage));
-		if(color_value[i] > (blank_value[i] * black_percentage)){ // Try to false the variable, verifaca se algum pasa do valor esperado
-			
+			Serial.println("\t\tValor percentage: " + String(black_percentage));*/
 			black = false; 
 		}
 	}
