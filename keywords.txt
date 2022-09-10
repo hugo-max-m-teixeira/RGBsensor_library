@@ -5,7 +5,7 @@ setPins	KEYWORD2
 setBlank	KEYWORD2
 getColor	KEYWORD2
 readColor	KEYWORD2
-getRefletanceOrder	KEYWORD2
+getReflectanceOrder	KEYWORD2
 getR	KEYWORD2
 getG	KEYWORD2
 getB	KEYWORD2
@@ -16,4 +16,9 @@ getPerCent	KEYWORD2
 setHighTime	KEYWORD2
 setLowTime	KEYWORD2
 commonAnode	KEYWORD2
-
+manyRGBsensors	KEYWORD1
+addSensor	KEYWORD2
+setHighTime	KEYWORD2
+setLowTime	KEYWORD2
+turn	KEYWORD2
+setFirstReadingMultiplier	KEYWORD2

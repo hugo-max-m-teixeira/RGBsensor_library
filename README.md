@@ -20,25 +20,50 @@ Biblioteca para Arduino desenvolvida para facilitar o uso de um sensor de cor ba
   ```cpp
     sensor.setRGBpins(4, 5, 6); // Pinos onde estão conectados os LEDs coloridos, respectivamente vermelho, verde e azul
   ```
-  Obervação: a ordem dos pinos informados deve ser: primeiro o pino do LED vermelho, depois do verde e logo em seguida do azul. Além disso, lembre-se de que os pinos informados devem ter a função de saída digital.
+  <strong>
+  Obervação: a ordem dos pinos informados na função "setRGBpins()" deve ser: primeiro o pino do LED vermelho, depois do verde e logo em seguida do azul. Além disso, lembre-se de que os pinos informados devem ter a função de saída digital.
+  </strong>
   
   Chegou a vez do LDR:
   
   ```cpp
-    sensor.setLDRpin(A0); // Pinos onde está conectado o LDR, resistor dependente de luz
+    sensor.setLDRpin(A0); // Pino onde está conectado o LDR, resistor dependente de luz
   ```
   Observação: Lembrando que o pino de leitura do LDR deve estar conectado a uma porta de leitura analógica.
 
-## Métodos
- ### Calibração:
+  Todas essas funções normalmente são colocadas na função de configuração do Arduino (void setup). Assim, o código que estamos a construir ficaria mais ou menos assim (com os pinos fictícios que colocamos nas funçoes):
+  ### Pseudo código
+```ino
+  #include <RGBsensor.h>	// Include RGBsensor library
+
+  RGBsensor sensor;	      // Creating RGBsensor object (this will be our sensor's name)
+
+  void setup (){
+
+    sensor.setRGBpins(4, 5, 6); // LED RGB pins (red, green, blue)
+    sensor.setLDRpins(A0);      // LDR pin (analog input)
+
+  }
+```
+
+# Métodos
+ ## Calibração:
   ```cpp
     sensor.setBlank();  // Reliza a calibração do sensor, adquirindo os valores de refletência na cor branca
   ```
   Observação: Quando esse método é chamado, o sensor deve estar posicionado sobre a cor branca. Os valores adquiridos nas leituras realizadas serão usados como referência para a comparação das demais cores.
   "sensor" - nome do objeto (nome dado ao sensor no programa)
-  <br><br>
-  
-  ### Realizar leitura e retornar cor:
+
+<br>
+
+  ```cpp
+    sensor.setBlackPercentage(uint8_t value);
+  ```
+  Seta (configura) o valor de corte para considerar a cor identificada como preto. O valor deve ser informado em porcentagem.
+  Obs.: O valor de corte padrão para a cor preta é 70%.
+<br>
+
+## Realizar leitura e retornar cor:
   ```cpp
     char color = sensor.getColor();
   ```
@@ -49,31 +74,84 @@ Biblioteca para Arduino desenvolvida para facilitar o uso de um sensor de cor ba
     <li>'B' - cor azul</li>
   </ul>
   O valor retornado será a cor (dentre as listadas acima) que apresentou maior refletância durante a leitura e comparação.
-  <br><br>
-  
-  ### Realizar leitura
-  Esse método raliza somente a leitura do sensor, não retornado valor algum (void).
+
+
+## Realizar leitura (somente):
   ```cpp
-    sensor.readColor(); // Realiza a leitura do sensor, sem retornar o valor da cor
+    sensor.readColor();
   ```
-  <br>
-  
-  ### Retornar cor
-  Retorna a cor lida pelo sensor (na última leitura realizada)
-  ```cpp
-    char color = sensor.getColor(uint8_t index); // Realiza a leitura do sensor
-  ```
-  Observações: Esse método retorna um valor do tipo char que pode assumir os mesmos valores do método readColor() <a href="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-e-retornar-cor">citado anteriormente</a>. 
-  Com relação ao "index" informado como parâmentro, esse representa a ordem de refletância que você deseja adquirir, sendo:
-  * index = 0 -> Cor que mais refletiu
-  * index = 1 -> Sengunda cor que mais relfetiu
-  * index = 2 -> Cor que menos refletiu
-  <br>
+  Quando chamado, esse método realiza o acendimento de cada uma das cores do LED RGB e captura a reflectância, por meio do LDR, de cada uma das cores do LED.
+
+## Retornar a cor por ordem de reflectância:
+```cpp
+  char color;
+
+  color = sensor.getReflectanceOrder(uint8_t index);
+```
+  Retorna a letra correspondente à cor que teve reflectância correspondente ao index informado.
+  Os valores possíveis para index são:
+  <ul>
+    <li>index = 0 -> cor que teve <strong>maior</strong> reflectância;</li>
+    <li>index = 1 -> cor que teve reflectância <strong>intermediária</strong>;</li>
+    <li>index = 2 -> cor que teve <strong>menor</strong> reflectância</li>
+  </ul>
+
+  Os Valores de retorno possíveis para essa função seguem o mesmo padrão da <a href="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-e-retornar-cor">função getColor()</a>, ou seja:
+   <ul>
+    <li>'R' - cor vermelha</li>
+    <li>'G' - cor verde</li>
+    <li>'B' - cor azul</li>
+  </ul>
+
+<br>
+
+## Porcentagem de refletância:
+```cpp
+  int reflectance;
+
+  reflectance = sensor.getPerCent(char color);
+  //or
+  reflectance = sensor.getPerCent(uint8_t index);
+```
+  Retorna a reflectância da cor informada, em porcentagem (0 - 100%), da última leitura realizada pelo sensor. Os valores possíveis para color seguem o mesmo padrão da <a href="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-e-retornar-cor">função getColor()</a>, ou seja:
+   <ul>
+    <li>'R' - cor vermelha</li>
+    <li>'G' - cor verde</li>
+    <li>'B' - cor azul</li>
+  </ul>
+
+  Os valores possíveis para index são:
+   <ul>
+    <li>0 - cor vermelha</li>
+    <li>1 - cor verde</li>
+    <li>2 - cor azul</li>
+  </ul>
+
+  Lembrando que, antes de ser adquirida a reflectância de qualquer cor, <strong>ao menos uma leitura deve ser realizada </strong>, com a <a hfef="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-(somente)">função readColor()</a>;
+
+<br>
+
+## Checa se a cor é preta
+ ```cpp
+  bool result;
+
+  result = sensor.isBlack();
+```
+ Lembrando que, antes de verificar se a cor é preta, <strong>ao menos uma leitura deve ser realizada </strong>, com a <a hfef="https://github.com/hugo-max-m-teixeira/RGBsensor_library#realizar-leitura-(somente)">função readColor()</a>;
+
+<br>
+
+## Para uma melhor compreensão, quel tal ver um <a href="https://github.com/hugo-max-m-teixeira/RGBsensor_library/blob/master/examples/simple_color_identification/simple_color_identification.ino">exemplo de código</a>
+
+<br><br>
+
 Circuito dos LEDs para a montagem do sensor:
 <br>
 <centered>
 <img src="https://lh3.googleusercontent.com/pw/AM-JKLX6JTpDHBP50dBqnG3bwnBzCkpaOF5wh4Fc9OgkYYe0CTNVMIpVxwUcUVzozkrkBF8ycurTQ2PYptZy5M6mjgJZi2IMfWKmt_VVAEeanrl9aEFmdDf4HogreXLsuzyqFEEEBVEHVj7i2zUQJyHUIlI=w523-h479-no?authuser=0" alt="LED RGB circuit">
 </centered>
+
+<br>
 
 Circuito do LDR para montagem do sensor:
 <br>
@@ -81,6 +159,6 @@ Circuito do LDR para montagem do sensor:
 <img src="https://lh3.googleusercontent.com/pw/AM-JKLVooRc7L8dB-TpldFEa9NZW3qI8LndtBVRrxjRPF1sbqRHDUFajTqYL70ggdA9lcXr9AL6yvvAdMhLznOt9NNCJVk-8OQvFuIDkToBRSDWkpjIf7yZDGHMFhxj4lHYPR-bTEU_-e_D2nyoZTQWTCb8=w423-h417-no?authuser=0" alt="LRD circuit">
 </centered>
 
-Circuito completo:
+Circuito completo com LED RGB:
 <br>
-<img src="https://lh3.googleusercontent.com/pw/AM-JKLU1B5X4Q9HlVQC1_h1vLYk-IrvgI0Za2PTlnOYTnM2Vr9TckHkaDhV_UsR4X0CoW3ir-sgSIkWJjpsWpVS_ipN0YdrWzbG9MQnjNvu0QCdvt6qszhmzb1b80uQOiTBWq8sPBekfPtbdw8xpUot_xWFS=w745-h529-no?authuser=0" alt="Complete sensor circuit">
+<img class="teste" src="https://lh3.googleusercontent.com/pw/AL9nZEUd7jZHjX4IssW9GO13bndIgVJQnCKGh9MjIqKscCKwm8PItvW2EFku8Rm-Ffj9u3meC_Q9B88BsbmVMZfePhURo5dxcFb_PLuik5herZjohwvFJejyPRc9D3O7FU5Eq6VXrOthFyIBIFk5wa8N-DQs=w774-h531-no?authuser=0" alt="Complete sensor circuit">
