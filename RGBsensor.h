@@ -30,22 +30,22 @@ public:
 	int getG();	//Returns the refletance of the green color
 	int getB();	//Returns the refletance of the blue color
 	int getColor(char color);	//Returns the refletance of the color sensor
-	int getColor(int index);
+	int getColor(uint8_t index);
 	int getBlank(char color);
-	int getBlank(int index);
+	int getBlank(uint8_t index);
 	void setBlank(char color, int value);
-	void setBlank(int index, int value);
+	void setBlank(uint8_t index, int value);
 	void setBlankValue(uint8_t color_index, uint16_t value);
 	void setCutoff(uint16_t val);		//Sets the cutoff value, for white color detect
-	void setBlackPercentage(float percent);	// Sets the min value for color reflectance to be considered non-black
+	void setBlackPercentage(uint8_t percent);	// Sets the min value for color reflectance to be considered non-black
 	void setMinColorVariation(uint16_t val);
 	int getPerCent(char color);			// Returns the percentage of the color variance compared to the blank color value
-	int getPerCent(int index);
+	int getPerCent(uint8_t index);
 	void setHighTime(uint16_t time);	//Time that the LED keeps ON
 	void setLowTime(uint16_t time);		//Time that the LED keeps OFF
 	void commonAnode();					// Common anode LED (don't call this method if your LED is common cathod)
 	void turn(char color, bool state);	//Change manually the state of the LED 
-	void turn(int color_num, bool state);
+	void turn(uint8_t color_num, bool state);
 	void setFirstReadingMultiplier(float multiplier);	// Sets the time multiplier for the first blank lecture
 	uint8_t getLDRpin();
 	void compareValues();		// Compare the values betwen white color and actual color
@@ -57,7 +57,8 @@ public:
 
 //protected:
 	unsigned long last_lecture;	// Last lecture time
-	uint16_t black_percentage = 70, min_color_variation = 7;
+	float black_percentage = 0.70;
+	uint16_t min_color_variation = 7;
 	unsigned int total_lecture_time;
 	float first_reading_multiplier = 3;	// Multiplier for first blank lecture
 	uint8_t pin_ldr;	//LDR pin (light sensor)
@@ -84,7 +85,7 @@ class manyRGBsensors{
 		char getColor();						// Read and return the most reflective identified color
 
 		void turn(char color, bool state);	//Change manually the state of the LED 
-		void turn(int color_num, bool state);
+		void turn(uint8_t color_num, bool state);
 };
 
 #endif

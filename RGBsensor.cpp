@@ -14,6 +14,9 @@ uint8_t RGBsensor::getLDRpin(){	return pin_ldr;	}
 
 void RGBsensor::setRGBpins(uint8_t pin_r, uint8_t pin_g, uint8_t pin_b){
 	pin_led[0] = pin_r;	pin_led[1] = pin_g;	pin_led[2] = pin_b;
+	for(int i:pin_led){
+		pinMode(i, OUTPUT);
+	}
 }
 
 void RGBsensor::setPins(){
@@ -39,19 +42,19 @@ int RGBsensor::getB(){	return color_value[2];	}
 
 int RGBsensor::getColor(char color){	return color_value[charToIndex(color)];	}
 
-int RGBsensor::getColor(int index){	return color_value[index];	}
+int RGBsensor::getColor(uint8_t index){	return color_value[index];	}
 
 int RGBsensor::getBlank(char color){	return blank_value[charToIndex(color)];	}
 
-int RGBsensor::getBlank(int index){	return blank_value[index];	}
+int RGBsensor::getBlank(uint8_t index){	return blank_value[index];	}
 
 void RGBsensor::setBlank(char color, int value){	 blank_value[charToIndex(color)] = value;	}
 
-void RGBsensor::setBlank(int index, int value){	 blank_value[index] = value;	}
+void RGBsensor::setBlank(uint8_t index, int value){	 blank_value[index] = value;	}
 
 int RGBsensor::getPerCent(char color){	return percent_value[charToIndex(color)];	}
 
-int RGBsensor::getPerCent(int index){	return percent_value[index];	}
+int RGBsensor::getPerCent(uint8_t index){	return percent_value[index];	}
 
 void RGBsensor::setCutoff(uint16_t val){	cutoff_percent_value = val;	}
 
@@ -61,7 +64,7 @@ void RGBsensor::setHighTime(uint16_t time){	high_time = time;	}
 
 void RGBsensor::setLowTime(uint16_t time){	low_time = time;	}
 
-void RGBsensor::setBlackPercentage(float percentage) {	black_percentage = 1.0 - (percentage/100.0);	}
+void RGBsensor::setBlackPercentage(uint8_t percentage) {	black_percentage = percentage/100.0;	}
 
 void RGBsensor::setBlankValue(uint8_t color_index, uint16_t value){	blank_value[color_index] = value;	}
 
@@ -69,7 +72,7 @@ void RGBsensor::commonAnode (){	this->common_anode = true;	}
 
 void RGBsensor::turn(char color, bool state){	turn(charToIndex(color), state);	}
 
-void RGBsensor::turn(int color_num, bool state){
+void RGBsensor::turn(uint8_t color_num, bool state){
 	if (common_anode) state = !state;
 	digitalWrite(pin_led[color_num], state);
 }
@@ -79,10 +82,11 @@ void RGBsensor::setFirstReadingMultiplier(float multiplier){	first_reading_multi
 bool RGBsensor::isBlack(){
 	bool black = true;
 	for(int i=0; i<3; i++){
-		if(color_value[i] > (blank_value[i] * black_percentage)){ // Try to false the variable, verifaca se algum pasa do valor esperado
-			/*Serial.println("\t\tValor da cor: " + String(color_value[i]));
+			Serial.println("\t\tValor da cor: " + String(color_value[i]));
 			Serial.println("\t\tValor da comparação: " + String((blank_value[i] * black_percentage)));
-			Serial.println("\t\tValor percentage: " + String(black_percentage));*/
+			Serial.println("\t\tValor percentage: " + String(black_percentage));
+		if(color_value[i] > (blank_value[i] * black_percentage)){ // Try to false the variable, verifaca se algum pasa do valor esperado
+			
 			black = false; 
 		}
 	}
@@ -90,10 +94,10 @@ bool RGBsensor::isBlack(){
 }
 
 void RGBsensor::setBlank(){
-	turn(2, 1);
+	turn(uint8_t(2), 1);
 	delay(500);
-	turn(2, 0);
-	for(int i=0; i<3; i++){	// For each LED
+	turn(uint8_t(2), 0);
+	for(uint8_t i=0; i<3; i++){	// For each LED
 		turn(i, 1);												// turn on the led "i"
 		delay(high_time);										// Wait a little moment (*1.8)
 		setBlankValue(i, analogRead(pin_ldr));
@@ -108,11 +112,11 @@ void RGBsensor::setBlank(){
 void RGBsensor::readColor(){
 	unsigned int delay_high = computeDelay(millis(), last_lecture, high_time);
 	unsigned int delay_low = computeDelay(millis(), last_lecture, low_time);
-	turn(0, 1);												// turn on the led "i"
+	turn(uint8_t(0), 1);												// turn on the led "i"
 	delay(delay_high);										// Wait a little moment
 	color_value[0] = analogRead(pin_ldr);					// Read the light(refletance) value
-	turn(0, 0);												// turn on the led "i"
-	for(int i=1; i<3; i++){	// For each LED
+	turn(uint8_t(0), 0);												// turn on the led "i"
+	for(uint8_t i=1; i<3; i++){	// For each LED
 		turn(i, 1);												// turn on the led "i"
 		delay(high_time);										// Wait a little moment
 		color_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
@@ -192,7 +196,7 @@ char RGBsensor::numberPerCentToColor (int value){
 }
 
 uint8_t RGBsensor::charToIndex(char color){
-	int value;
+	uint8_t value;
 	if ((color == 'R') || (color == 'r'))	value = 0;
 	else if ((color == 'G') || (color == 'g'))	value = 1;
 	else if ((color == 'B') || (color == 'b'))	value = 2;
@@ -214,11 +218,11 @@ void manyRGBsensors::addSensor(RGBsensor *new_sensor){
 }
 
 void manyRGBsensors::setBlank(){
-	turn(0, 1);
+	turn(uint8_t(0), 1);
 	delay(500);
-	turn(0, 0);
+	turn(uint8_t(0), 0);
 	
-	for(int i=0; i<3; i++){	// For each color...
+	for(uint8_t i=0; i<3; i++){	// For each color...
 		turn(i, 1);
 		delay(sensors[0]->high_time);
 		for(int j=0; j<amount; j++){	// For each sensor...
@@ -236,13 +240,13 @@ void manyRGBsensors::setBlank(){
 void manyRGBsensors::readColor(){
 	unsigned int delay_high = sensors[0]->computeDelay(millis(), sensors[0]->last_lecture, sensors[0]->high_time);
 	//unsigned int delay_low = computeDelay(millis(), sensors[0]->last_lecture, sensors[0]->low_time);
-	turn(0, 1);												// turn on the red led (index 0)
+	turn(uint8_t(0), 1);												// turn on the red led (index 0)
 	delay(delay_high);										// Wait a little moment
 	for(int i=0; i<amount; i++){
 		sensors[i]->color_value[0] = analogRead(sensors[i]->getLDRpin());	// Read the light(refletance) value for the first color (red)
 	}
-	manyRGBsensors::turn(0, 0);												// turn off the red led (index 0)
-	for(int i=1; i<3; i++){	// For each LED
+	turn(uint8_t(0), 0);												// turn off the red led (index 0)
+	for(uint8_t i=1; i<3; i++){	// For each LED
 		turn(i, 1);											// turn on the led "i"
 		delay(sensors[0]->high_time);										// Wait a little moment
 		for(int j=0; j<amount; j++){
@@ -258,9 +262,9 @@ void manyRGBsensors::readColor(){
 	}	
 }
 
-void manyRGBsensors::turn(char color, bool state){	turn(sensors[0]->charToIndex(color), state);	}
+void manyRGBsensors::turn(char color, bool state){	manyRGBsensors::turn(sensors[0]->charToIndex(color), state);	}
 
-void manyRGBsensors::turn(int color_num, bool state){
+void manyRGBsensors::turn(uint8_t color_num, bool state){
 	for(int i=0; i<amount; i++){
 		sensors[i]->turn(color_num, state);
 	}
