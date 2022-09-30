@@ -9,11 +9,14 @@ RGBsensor sensor;	// Creating RGBsensor object named sensor (this will be our se
 #define rgb_led_g 53
 #define rgb_led_b 52
 
+// LDR pin
+#define ldr_pin A0
+
 void setup () {
 	Serial.begin(9600);	// Activating Serial monitor, for printing information on monitor
 	
-	sensor.setLDRpin(A0);			// A entrada de sinal do sensor LDR está conectada na porta A7 (obrigatoriamente essa entrada de sinal deve ser em uma porta analógica)
-	sensor.setRGBpins(51, 53, 52);	// Os pinos do nosso LED RGB (red - pino A0, green - pino A5, blue - pino A3. A ordem dos pinos informada deve respectivamente para os LEDs vermelho, verde e azul. Os pinos informados deve funcionar como saída digital.)
+	sensor.setLDRpin(ldr_pin);			// A entrada de sinal do sensor LDR está conectada na porta A7 (obrigatoriamente essa entrada de sinal deve ser em uma porta analógica)
+	sensor.setRGBpins(rgb_led_r, rgb_led_g, rgb_led_b);	// Os pinos do nosso LED RGB (red - pino A0, green - pino A5, blue - pino A3. A ordem dos pinos informada deve respectivamente para os LEDs vermelho, verde e azul. Os pinos informados deve funcionar como saída digital.)
 
 	delay(200);						// Aguarda 200 ms
 	sensor.setBlank();				// Realiza a leitura da cor branca, para servir como referência de comparação para as demais cores.
