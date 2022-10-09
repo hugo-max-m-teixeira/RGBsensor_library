@@ -214,12 +214,21 @@ void manyRGBsensors::addSensor(RGBsensor *new_sensor){
 	amount++;
 	sensors = realloc(sensors, amount*sizeof(RGBsensor));
 	sensors[amount - 1] = new_sensor;
+	if(amount > 1){	// If there are more than one sensor...
+		for(int i=1; i<amount; i++){// Each sensor
+			for(int p=0; p<3; p++){	// Receives the LED pins of the first sensor
+				sensors[i]->pin_led[p] = sensors[0]->pin_led[p];
+			}
+			sensors[i]->setHighTime(sensors[0]->high_time);
+			sensors[i]->setBlackPercentage(sensors[0]->black_percentage);
+		}
+	}
 }
 
 void manyRGBsensors::setBlank(){
-	turn(uint8_t(0), 1);
-	delay(500);
-	turn(uint8_t(0), 0);
+	turn(uint8_t(1), 1);
+	delay(750);
+	turn(uint8_t(1), 0);
 	
 	for(uint8_t i=0; i<3; i++){	// For each color...
 		turn(i, 1);

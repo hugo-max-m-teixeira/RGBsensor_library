@@ -22,3 +22,4 @@ setHighTime	KEYWORD2
 setLowTime	KEYWORD2
 turn	KEYWORD2
 setFirstReadingMultiplier	KEYWORD2
+isBlack	KEYWORD2

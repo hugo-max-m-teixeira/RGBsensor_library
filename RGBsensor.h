@@ -57,7 +57,7 @@ public:
 
 //protected:
 	unsigned long last_lecture;	// Last lecture time
-	float black_percentage = 0.70;
+	float black_percentage = 0.60;
 	uint16_t min_color_variation = 7;
 	unsigned int total_lecture_time;
 	float first_reading_multiplier = 3;	// Multiplier for first blank lecture
@@ -67,7 +67,7 @@ public:
 	uint16_t cutoff_percent_value = 10;	// Cutoff value for white and color diferentiation
 	char color = "";	// Color => 'R' =  red,     'G' = green,     'B' = blue
 	char reflectance_order[3] = {""};	// Descending order of refletance
-	uint16_t high_time = 80, low_time = 0;	//Default times HIGH and LOW
+	uint16_t high_time = 70, low_time = 0;	//Default times HIGH and LOW
 	bool common_anode = false;
 };
 
