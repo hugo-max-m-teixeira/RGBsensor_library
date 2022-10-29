@@ -4,6 +4,12 @@ setRGBpins	KEYWORD2
 setPins	KEYWORD2
 setBlank	KEYWORD2
 getColor	KEYWORD2
+getR	KEYWORD2
+getG	KEYWORD2
+getB	KEYWORD2
+isRed	KEYWORD2
+isGreen	KEYWORD2
+isBlue	KEYWORD2
 readColor	KEYWORD2
 getReflectanceOrder	KEYWORD2
 getR	KEYWORD2
@@ -21,5 +27,8 @@ addSensor	KEYWORD2
 setHighTime	KEYWORD2
 setLowTime	KEYWORD2
 turn	KEYWORD2
+specialDigitalWrite	KEYWORD2
 setFirstReadingMultiplier	KEYWORD2
+setMinColorVariation	KEYWORD2
+setBlackPercentage	KEYWORD2
 isBlack	KEYWORD2

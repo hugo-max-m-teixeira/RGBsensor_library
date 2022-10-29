@@ -34,6 +34,12 @@ char RGBsensor::getColor(){
 
 char RGBsensor::getReflectanceOrder(uint8_t pos){	return reflectance_order[pos];	}
 
+bool RGBsensor::isRed(){ return (reflectance_order[0] == 'R') ? true : false;	}
+
+bool RGBsensor::isGreen(){ return (reflectance_order[0] == 'G') ? true : false;	}
+
+bool RGBsensor::isBlue(){ return (reflectance_order[0] == 'B') ? true : false;	}
+
 int RGBsensor::getR(){	return color_value[0];	}
 
 int RGBsensor::getG(){	return color_value[1];	}
@@ -74,7 +80,16 @@ void RGBsensor::turn(char color, bool state){	turn(charToIndex(color), state);	}
 
 void RGBsensor::turn(uint8_t color_num, bool state){
 	if (common_anode) state = !state;
-	digitalWrite(pin_led[color_num], state);
+	if (special_turn){
+		specialTurn(pin_led[color_num], state);
+	} else {
+		digitalWrite(pin_led[color_num], state);
+	}
+}
+
+void RGBsensor::specialDigitalWrite(void (*turn_function)(int, bool)){
+	special_turn = true;
+	specialTurn = turn_function;
 }
 
 void RGBsensor::setFirstReadingMultiplier(float multiplier){	first_reading_multiplier = multiplier;	}
