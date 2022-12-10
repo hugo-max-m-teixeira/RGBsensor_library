@@ -235,7 +235,7 @@ void manyRGBsensors::addSensor(RGBsensor *new_sensor){
 				sensors[i]->pin_led[p] = sensors[0]->pin_led[p];
 			}
 			sensors[i]->setHighTime(sensors[0]->high_time);
-			sensors[i]->setBlackPercentage(sensors[0]->black_percentage);
+			sensors[i]->black_percentage = sensors[0]->black_percentage;
 		}
 	}
 }
