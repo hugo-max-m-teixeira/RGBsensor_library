@@ -3,10 +3,12 @@
 Biblioteca para Arduino desenvolvida para facilitar o uso de um sensor de cor baseado em um LDR e em um LED RGB. O programa permite que o usuário:
 <ul>
   <li>Calibre o sensor</li>
-  <li>Identifique qual das 3 cores (dentre o vermelho, verde e azul) apresentou maior refletância</li>
-  <li>Identifique a ordem de fefletância dessas 3 cores (da maior para a menor)</li>
-  <li>Receber os valores de refletância em valores discretos de variações de tensão ou em porcentagem para cada uma das cores do LED RGB</>
+  <li>Identifique qual das 3 cores (dentre o vermelho, verde e azul) apresentou maior refletância;</li>
+  <li>Identifique a ordem de fefletância dessas 3 cores (qual cor refletiu proporcionalmente mais ou menos);</li>
+  <li>Obtenha os valores de refletância em valores discretos de variações de tensão ou em porcentagem de relfectância para cada uma das cores do LED RGB.</>
 </ul>
+
+</br>
 
 ## Configurando o sensor:
   Lembrando que os códigos fornecidos abaixo são de exemplo, os pinos informados não precisam ser os mesmos mencionados aqui.
@@ -46,7 +48,7 @@ Biblioteca para Arduino desenvolvida para facilitar o uso de um sensor de cor ba
   }
 ```
 
-# Métodos
+# Métodos da biblioteca
  ## Calibração:
   ```cpp
     sensor.setBlank();  // Reliza a calibração do sensor, adquirindo os valores de refletência na cor branca
