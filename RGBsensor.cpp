@@ -74,6 +74,8 @@ void RGBsensor::setBlackPercentage(uint8_t percentage) {	black_percentage = perc
 
 void RGBsensor::setBlankValue(uint8_t color_index, uint16_t value){	blank_value[color_index] = value;	}
 
+
+
 void RGBsensor::commonAnode (){	this->common_anode = true;	}
 
 void RGBsensor::turn(char color, bool state){	turn(charToIndex(color), state);	}
@@ -107,15 +109,16 @@ bool RGBsensor::isBlack(){
 	return black;
 }
 
-void RGBsensor::setBlank(){
-	turn(uint8_t(2), 1);
-	delay(500);
-	turn(uint8_t(2), 0);
+void RGBsensor::readAndStoreAt(int* variable){
+	#if !defined phototransistor
+		turn(uint8_t(2), 1);
+		delay(500);
+		turn(uint8_t(2), 0);
+	#endif
 	for(uint8_t i=0; i<3; i++){	// For each LED
 		turn(i, 1);												// turn on the led "i"
 		delay(high_time);										// Wait a little moment (*1.8)
-		setBlankValue(i, analogRead(pin_ldr));
-		//blank_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
+		variable[i] = analogRead(pin_ldr);						// Read the light(refletance) value
 		turn(i, 0);												// Turn off the led "i"
 		delay(low_time);										// Wait a moment while the LED stops emitting light	
 	}
@@ -123,23 +126,35 @@ void RGBsensor::setBlank(){
 	total_lecture_time = high_time + low_time;
 }
 
+void RGBsensor::setBlank(){
+	readAndStoreAt(blank_value);
+}
+
+void RGBsensor::setBlack(){
+	readAndStoreAt(black_value);
+}
+
 void RGBsensor::readColor(){
-	unsigned int delay_high = computeDelay(millis(), last_lecture, high_time);
-	unsigned int delay_low = computeDelay(millis(), last_lecture, low_time);
-	turn(uint8_t(0), 1);												// turn on the led "i"
-	delay(delay_high);										// Wait a little moment
-	color_value[0] = analogRead(pin_ldr);					// Read the light(refletance) value
-	turn(uint8_t(0), 0);												// turn on the led "i"
-	for(uint8_t i=1; i<3; i++){	// For each LED
-		turn(i, 1);												// turn on the led "i"
-		delay(high_time);										// Wait a little moment
-		color_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
-		turn(i, 0);												// Turn off the led "i"
-		delay(low_time);										// Wait a moment while the LED stops emitting light
-		
-	}
-	compareValues();	
-	last_lecture = millis();
+	#if !defined phototransistor
+		unsigned int delay_high = computeDelay(millis(), last_lecture, high_time);
+		unsigned int delay_low = computeDelay(millis(), last_lecture, low_time);
+		turn(uint8_t(0), 1);												// turn on the led "i"
+		delay(delay_high);										// Wait a little moment
+		color_value[0] = analogRead(pin_ldr);					// Read the light(refletance) value
+		turn(uint8_t(0), 0);												// turn on the led "i"
+		for(uint8_t i=1; i<3; i++){	// For each LED
+			turn(i, 1);												// turn on the led "i"
+			delay(high_time);										// Wait a little moment
+			color_value[i] = analogRead(pin_ldr);					// Read the light(refletance) value
+			turn(i, 0);												// Turn off the led "i"
+			delay(low_time);										// Wait a moment while the LED stops emitting light
+			
+		}
+		compareValues();	
+		last_lecture = millis();
+	#else
+		readAndStoreAt(color_value);	
+	#endif
 }
 
 unsigned int RGBsensor::computeDelay(unsigned long actual_time, unsigned long last_time, unsigned int default_delay){

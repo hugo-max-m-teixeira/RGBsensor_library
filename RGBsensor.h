@@ -19,7 +19,8 @@ public:
 	void setPins();	// pinMode and etc.
 	
 	//Basic methods
-	void setBlank();	// Set the blank color
+	void setBlank();	// Set the blank reflectance values
+	void setBlack();	// Set the black reflectance values 
 	char getColor();	// Read and return the strongest actual color ('R', 'G' or 'B')
 	bool isBlack();
 	
@@ -53,6 +54,7 @@ public:
 	void commonAnode();					// Common anode LED (don't call this method if your LED is common cathod)
 	void setFirstReadingMultiplier(float multiplier);	// Sets the time multiplier for the first blank lecture
 	uint8_t getLDRpin();
+	void readAndStoreAt(int* variable);
 	
 	// "DigitalWrite" functions, used to turn a pin to HIGH or LOW
 	void turn(char color, bool state);	//Change manually the state of the LED 
@@ -78,7 +80,7 @@ public:
 	float first_reading_multiplier = 3;	// Multiplier for first blank lecture
 	uint8_t pin_ldr;	//LDR pin (light sensor)
 	uint8_t pin_led[3];	//LEDs pins (pin_led[0] = red, pin_led[1] = green, pin_led[2] = blue)
-	int blank_value[3], color_value[3], compared_value[3], percent_value[3];	// Light values
+	int blank_value[3], black_value[3], color_value[3], compared_value[3], percent_value[3];	// Light values
 	uint16_t cutoff_percent_value = 10;	// Cutoff value for white and color diferentiation
 	char color = "";	// Color => 'R' =  red,     'G' = green,     'B' = blue
 	char reflectance_order[3] = {""};	// Descending order of refletance
