@@ -8,7 +8,10 @@
 
 #include <RGBsensor.h>
 
-void RGBsensor::setLDRpin(uint8_t pin){	pin_ldr = pin;	}
+void RGBsensor::setLDRpin(uint8_t pin){
+	pin_ldr = pin;
+	pinMode(pin_ldr, INPUT);
+}
 
 uint8_t RGBsensor::getLDRpin(){	return pin_ldr;	}
 
@@ -16,10 +19,11 @@ void RGBsensor::setRGBpins(uint8_t pin_r, uint8_t pin_g, uint8_t pin_b){
 	pin_led[0] = pin_r;	pin_led[1] = pin_g;	pin_led[2] = pin_b;
 	for(int i:pin_led){
 		pinMode(i, OUTPUT);
+		digitalWrite(i, LOW);
 	}
 }
 
-void RGBsensor::setPins(){
+void RGBsensor::setPins(){		// Not necessary anymore
 	pinMode(pin_ldr, INPUT);	// LDR sensor as input
 	for(int i:pin_led){
 		pinMode(i, OUTPUT);		// LEDs as output
@@ -109,8 +113,8 @@ bool RGBsensor::isBlack(){
 	return black;
 }
 
-void RGBsensor::readAndStoreAt(int* variable){
-	#if !defined phototransistor
+void RGBsensor::readAndStoreAt(int* variable_array){
+	#if !defined PHOTOTRANSISTOR
 		turn(uint8_t(2), 1);
 		delay(500);
 		turn(uint8_t(2), 0);
@@ -118,7 +122,7 @@ void RGBsensor::readAndStoreAt(int* variable){
 	for(uint8_t i=0; i<3; i++){	// For each LED
 		turn(i, 1);												// turn on the led "i"
 		delay(high_time);										// Wait a little moment (*1.8)
-		variable[i] = analogRead(pin_ldr);						// Read the light(refletance) value
+		variable_array[i] = analogRead(pin_ldr);						// Read the light(refletance) value
 		turn(i, 0);												// Turn off the led "i"
 		delay(low_time);										// Wait a moment while the LED stops emitting light	
 	}
@@ -135,7 +139,7 @@ void RGBsensor::setBlack(){
 }
 
 void RGBsensor::readColor(){
-	#if !defined phototransistor
+	#if !defined PHOTOTRANSISTOR
 		unsigned int delay_high = computeDelay(millis(), last_lecture, high_time);
 		unsigned int delay_low = computeDelay(millis(), last_lecture, low_time);
 		turn(uint8_t(0), 1);												// turn on the led "i"

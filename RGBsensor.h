@@ -54,7 +54,7 @@ public:
 	void commonAnode();					// Common anode LED (don't call this method if your LED is common cathod)
 	void setFirstReadingMultiplier(float multiplier);	// Sets the time multiplier for the first blank lecture
 	uint8_t getLDRpin();
-	void readAndStoreAt(int* variable);
+	void readAndStoreAt(int* variable_array);
 	
 	// "DigitalWrite" functions, used to turn a pin to HIGH or LOW
 	void turn(char color, bool state);	//Change manually the state of the LED 
@@ -85,6 +85,10 @@ public:
 	char color = "";	// Color => 'R' =  red,     'G' = green,     'B' = blue
 	char reflectance_order[3] = {""};	// Descending order of refletance
 	uint16_t high_time = 70, low_time = 0;	//Default times HIGH and LOW
+	#if defined PHOTOTRANSISTOR	// Checks if a phototransistor is being used
+		high_time = 2;
+		low_time = 0;
+	#endif
 	bool common_anode = false;
 };
 
