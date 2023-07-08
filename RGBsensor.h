@@ -82,7 +82,7 @@ public:
 	uint8_t pin_led[3];	//LEDs pins (pin_led[0] = red, pin_led[1] = green, pin_led[2] = blue)
 	int blank_value[3], black_value[3], color_value[3], compared_value[3], percent_value[3];	// Light values
 	uint16_t cutoff_percent_value = 10;	// Cutoff value for white and color diferentiation
-	char color = "";	// Color => 'R' =  red,     'G' = green,     'B' = blue
+	char color = 'n';	// Color => 'R' =  red,     'G' = green,     'B' = blue
 	char reflectance_order[3] = {""};	// Descending order of refletance
 	uint16_t high_time = 70, low_time = 0;	//Default times HIGH and LOW
 	#if defined PHOTOTRANSISTOR	// Checks if a phototransistor is being used
@@ -95,7 +95,8 @@ public:
 class manyRGBsensors{
 	public:
 		uint16_t amount = 0;
-		RGBsensor **sensors = malloc(sizeof(RGBsensor));
+		
+		RGBsensor **sensors = (RGBsensor**)malloc(sizeof(RGBsensor));
 		
 		manyRGBsensors(RGBsensor *sensors_[]);
 		manyRGBsensors(){}
