@@ -70,7 +70,7 @@ void RGBsensor::setHighTime(uint16_t time){	high_time = time;	}
 
 void RGBsensor::setLowTime(uint16_t time){	low_time = time;	}
 
-void RGBsensor::setBlackPercentage(uint8_t percentage) {	black_percentage = percentage/100.0;	}
+void RGBsensor::setBlackPercentage(float percentage) {	black_percentage = percentage;	}
 
 void RGBsensor::setBlankValue(uint8_t color_index, uint16_t value){	blank_value[color_index] = value;	}
 

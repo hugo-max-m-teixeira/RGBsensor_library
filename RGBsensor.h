@@ -46,7 +46,7 @@ public:
 	void setBlank(uint8_t index, int value);
 	void setBlankValue(uint8_t color_index, uint16_t value);
 	void setCutoff(uint16_t val);		//Sets the cutoff value, for white color detect
-	void setBlackPercentage(uint8_t percent);	// Sets the min value for color reflectance to be considered non-black
+	void setBlackPercentage(float percent);	// Sets the min value for color reflectance to be considered non-black
 	void setMinColorVariation(uint16_t val);
 	void setHighTime(uint16_t time);	//Time that the LED keeps ON
 	void setLowTime(uint16_t time);		//Time that the LED keeps OFF
